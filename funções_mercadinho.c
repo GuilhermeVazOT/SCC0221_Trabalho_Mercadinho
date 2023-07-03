@@ -4,6 +4,10 @@ struct Estoque{
     int quantidade;
 };
 
+
+
 int insere_Produto(){
     
 }
+
+//teste
