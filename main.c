@@ -32,6 +32,9 @@ void consultaCaixa(int n){
 }
 
 
+/// @brief 
+/// @param estoque 
+/// @param n 
 void consultaEstoque(struct Produto **estoque, int n){
 
     for(int i =0; i<n; i++){
