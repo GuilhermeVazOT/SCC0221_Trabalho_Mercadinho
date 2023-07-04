@@ -5,12 +5,22 @@ O sistema deve ser capaz de realizar consultas de saldo, estoque, incluir novos 
 #include <stdlib.h>
 #include <string.h>
 
+//prototipagem das funções
+void realoca(struct Produto **estoque, int n);
+void aloca(struct Produto **estoque, int n);
+void insereProduto(struct Produto **estoque, int *tamanho, int *posicao);
+void consultaCaixa(int n);
+void consultaEstoque(struct Produto **estoque, int n);
+
 struct Produto{
     char produto[50];
     int preço;
     int quantidade;
 };
 
+/// @brief função que realoca para um espaço de memória maior
+/// @param estoque ponteiro para o vetor que deve ser realocado
+/// @param n tamanho para o qual deve ser realocado
 void realoca(struct Produto **estoque, int n){
     //realoca pra caber n structs Produto
     *estoque = realloc(*estoque, n*sizeof(struct Produto));
@@ -20,6 +30,9 @@ void realoca(struct Produto **estoque, int n){
     }
 }
 
+/// @brief função que realoca um espaço de memória para um ponteiro
+/// @param estoque ponteiro para o array que será alocado
+/// @param n tamanho do espaço de memória alocado
 void aloca(struct Produto **estoque, int n){
     //realoca pra caber n structs Produto
     *estoque = malloc(n*sizeof(struct Produto));
