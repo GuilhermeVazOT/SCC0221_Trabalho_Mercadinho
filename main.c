@@ -55,7 +55,6 @@ void aloca(struct Produto **estoque, int n){
 void insereProduto(struct Produto **estoque, int *tamanho, int *posicao){
     
     if(*posicao >= *tamanho){
-        
         //se a posição alcançar o tamanho do vetor, realoca pro dobro do tamanho
         (*tamanho)+=(*tamanho);
         //realoca pro tamanho maior
@@ -66,8 +65,8 @@ void insereProduto(struct Produto **estoque, int *tamanho, int *posicao){
     (*posicao)++;
     //le e insere um novo produto;
     scanf(" %s", (*estoque)[(*posicao)].produto);
-    scanf("%d", &(*estoque)[(*posicao)-1].quantidade);
-    scanf("%d", &(*estoque)[(*posicao)-1].preço);
+    scanf("%d", &(*estoque)[(*posicao)].quantidade);
+    scanf("%d", &(*estoque)[(*posicao)].preço);
     
 }
 /// @brief = função que imprime o saldo do caixa
