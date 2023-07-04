@@ -1,5 +1,9 @@
 /*Este programa tem como objetivo a criação de um sistema de controle de estoque e caixa para um mercadinho.
-O sistema deve ser capaz de realizar consultas de saldo, estoque, incluir novos produtos, realizar vendas*/
+O sistema deve ser capaz de realizar consultas de saldo, estoque, incluir novos produtos, realizar vendas, modificar preço e aumentar estoque.
+
+O programa foi modularizado e a explicação detalhada de cada função ocorrerá no decorrer do código.
+
+Autores: Catarina Moreira Lima - 8957221*/
 
 #include <stdio.h>
 #include <stdlib.h>
