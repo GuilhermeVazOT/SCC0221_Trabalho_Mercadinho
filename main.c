@@ -9,6 +9,13 @@ Autores: Catarina Moreira Lima - 8957221*/
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct _Produto{
+    char produto[50];
+    float preco;
+    int quantidade;
+    int codigo;
+}Produto;
+
 //prototipagem das funções
 void realoca(Produto **estoque, int n);
 void aloca(Produto **estoque, int n);
@@ -18,13 +25,9 @@ void consultaEstoque(Produto **estoque, int n);
 void leEstoque(FILE *fp, Produto *estoque);
 void modificaPreco(Produto **estoque);
 void venda(Produto **estoque, float *caixa);
+void aumentaEstoque(Produto **estoque);
 
-typedef struct _Produto{
-    char produto[50];
-    float preco;
-    int quantidade;
-    int codigo;
-}Produto;
+
 
 
 
@@ -137,7 +140,7 @@ void insereProduto(Produto **estoque, int *tamanho, int *posicao){
     scanf(" %s", (*estoque)[(*posicao)].produto);
     scanf("%d", &(*estoque)[(*posicao)].quantidade);
     scanf("%f", &(*estoque)[(*posicao)].preco);
-    (*estoque)[(*posicao)].codigo=posicao;
+    (*estoque)[(*posicao)].codigo=*posicao;
     
     (*posicao)++;
     
@@ -178,7 +181,7 @@ int main(){
     //nesse caso teriamos tamanho 4, mas nenhum item ainda inserido, o que causaria erro nos indices
     int posicao=0;
     int tamanho=0;
-    int caixa=0;
+    float caixa=0;
     FILE *fp;
     char comando[3];
 
@@ -193,8 +196,8 @@ int main(){
         }
         
         else{
-            fscanf("%d", &tamanho);
-            fscanf("%f", &caixa);
+            fscanf(fp, "%d", &tamanho);
+            fscanf(fp, "%f", &caixa);
            
             //aloca o vetor estoque do tamanho necessário
             aloca(&estoque, tamanho);
@@ -207,7 +210,7 @@ int main(){
     while(1){
         scanf(" %s", comando);
 
-        if(srtcmp(comando, "IP")==0){
+        if(strcmp(comando, "IP")==0){
              //passa endereço do estoque e o tamanho atual. Passando o tamanho por referência pq sempre vamos
             //incrementar, ai já fazemos isso na função pra deixar limpo
             insereProduto(&estoque, &tamanho, &posicao);
