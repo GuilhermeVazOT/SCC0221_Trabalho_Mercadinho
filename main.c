@@ -10,24 +10,84 @@ Autores: Catarina Moreira Lima - 8957221*/
 #include <string.h>
 
 //prototipagem das funções
-void realoca(struct Produto **estoque, int n);
-void aloca(struct Produto **estoque, int n);
-void insereProduto(struct Produto **estoque, int *tamanho, int *posicao);
+void realoca(Produto **estoque, int n);
+void aloca(Produto **estoque, int n);
+void insereProduto(Produto **estoque, int *tamanho, int *posicao);
 void consultaCaixa(int n);
-void consultaEstoque(struct Produto **estoque, int n);
-void leEstoque(FILE *fp, struct Produto *estoque);
+void consultaEstoque(Produto **estoque, int n);
+void leEstoque(FILE *fp, Produto *estoque);
+void modificaPreco(Produto **estoque);
+void venda(Produto **estoque, float *caixa);
 
-struct Produto{
+typedef struct _Produto{
     char produto[50];
-    float preço;
+    float preco;
     int quantidade;
     int codigo;
-};
+}Produto;
 
-void leEstoque(FILE *fp, struct Produto *estoque){
+
+
+
+
+/// @brief 
+/// @param estoque 
+void modificaPreco(Produto **estoque){
+    float preco_novo;
+	int cod;
+    scanf(" %d %f", &cod, &preco_novo);
+    (*estoque)[cod].preco = preco_novo;
+}
+
+void venda(Produto **estoque, float *caixa){
+
+	int *carrinho = NULL;
+	float precoTotal = 0;
+	int tam = 10;
+	int cont = 0; 
+
+	carrinho = (int*)calloc(tam, sizeof(int));
+
+	if (carrinho == NULL){
+		printf("ERRO: sem memoria pro carrinho\n");
+		exit(1);
+	}
+
+	while(1){
+		if (cont == tam){
+			tam += tam; 
+			carrinho = (int *) realloc(carrinho, sizeof(int)*tam);
+            if (carrinho == NULL){
+				printf("ERRO: sem memoria pro carrinho\n");
+				exit(1);
+			}
+		}
+        scanf(" %d", &carrinho[cont]);
+        if (carrinho[cont] == -1){
+			break;
+		}
+        cont++;
+    }
+
+	for (int i = 0; i < cont; i++){
+		(*estoque)[carrinho[i]].quantidade--;
+        precoTotal += (*estoque)[carrinho[i]].preco;
+        printf("%s %f", (*estoque)[carrinho[i]].produto, (*estoque)[carrinho[i]].preco);
+    }
+
+	(*caixa) += precoTotal;
+    printf("Total: %f\n", precoTotal);
+    for (int j = 0; j < 50; j++){
+		printf("-");
+	}
+	printf("\n");
+}
+
+
+void leEstoque(FILE *fp, Produto *estoque){
 
         fscanf(fp, "%s", estoque->produto);
-        fscanf(fp, "%.2f", &estoque->preço);
+        fscanf(fp, "%.2f", &estoque->preco);
         fscanf(fp, "%d", &estoque->quantidade);
         fscanf(fp, "%d", &estoque->codigo);
 
@@ -36,9 +96,9 @@ void leEstoque(FILE *fp, struct Produto *estoque){
 /// @brief função que realoca para um espaço de memória maior
 /// @param estoque ponteiro para o vetor que deve ser realocado
 /// @param n tamanho para o qual deve ser realocado
-void realoca(struct Produto **estoque, int n){
+void realoca(Produto **estoque, int n){
     //realoca pra caber n structs Produto
-    *estoque = realloc(*estoque, n*sizeof(struct Produto));
+    *estoque = realloc(*estoque, n*sizeof(Produto));
     if(*estoque == NULL){
         printf("Sem memória");
         exit(1);
@@ -48,9 +108,9 @@ void realoca(struct Produto **estoque, int n){
 /// @brief função que realoca um espaço de memória para um ponteiro
 /// @param estoque ponteiro para o array que será alocado
 /// @param n tamanho do espaço de memória alocado
-void aloca(struct Produto **estoque, int n){
+void aloca(Produto **estoque, int n){
     //realoca pra caber n structs Produto
-    *estoque = malloc(n*sizeof(struct Produto));
+    *estoque = malloc(n*sizeof(Produto));
 
      if(*estoque == NULL){
         printf("Sem memória");
@@ -59,11 +119,11 @@ void aloca(struct Produto **estoque, int n){
     
 }
 
-/// @brief = função que insere uma nova struct ao fim de um vetor de structs
+/// @brief = função que insere uma nova ao fim de um vetor de structs
 /// @param estoque = ponteiro para o vetor que armazena as structs de produtos
 /// @param tamanho = tamanho do vetor
-/// @param posicao = posição da ultima struct inserida no vetor
-void insereProduto(struct Produto **estoque, int *tamanho, int *posicao){
+/// @param posicao = posição da ultima inserida no vetor
+void insereProduto(Produto **estoque, int *tamanho, int *posicao){
     
     if(*posicao >= *tamanho){
         //se a posição alcançar o tamanho do vetor, realoca pro dobro do tamanho
@@ -76,7 +136,7 @@ void insereProduto(struct Produto **estoque, int *tamanho, int *posicao){
     //le e insere um novo produto;
     scanf(" %s", (*estoque)[(*posicao)].produto);
     scanf("%d", &(*estoque)[(*posicao)].quantidade);
-    scanf("%f", &(*estoque)[(*posicao)].preço);
+    scanf("%f", &(*estoque)[(*posicao)].preco);
     (*estoque)[(*posicao)].codigo=posicao;
     
     (*posicao)++;
@@ -97,7 +157,7 @@ void consultaCaixa(int n){
 /// @brief = função que percorre o vetor de structs e imprime codigo, nome e quantidade
 /// @param estoque = ponteiro para o vetor que armazena as structs de produtos
 /// @param n = tamanho do vetor
-void consultaEstoque(struct Produto **estoque, int n){
+void consultaEstoque(Produto **estoque, int n){
 
     for(int i =0; i<n; i++){
         printf("%d %s %d\n", (*estoque)[i].codigo, (*estoque)[i].produto, (*estoque)[i].quantidade);
@@ -113,7 +173,7 @@ void consultaEstoque(struct Produto **estoque, int n){
 
 
 int main(){
-    struct Produto *estoque = NULL;
+    Produto *estoque = NULL;
     //para o caso de não existir arquivo e ser lido um tamanho >0 do terminal
     //nesse caso teriamos tamanho 4, mas nenhum item ainda inserido, o que causaria erro nos indices
     int posicao=0;
