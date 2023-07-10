@@ -19,7 +19,7 @@ void leEstoque(FILE *fp, struct Produto *estoque);
 
 struct Produto{
     char produto[50];
-    int preço;
+    float preço;
     int quantidade;
     int codigo;
 };
@@ -27,7 +27,7 @@ struct Produto{
 void leEstoque(FILE *fp, struct Produto *estoque){
 
         fscanf(fp, "%s", estoque->produto);
-        fscanf(fp, "%d", &estoque->preço);
+        fscanf(fp, "%.2f", &estoque->preço);
         fscanf(fp, "%d", &estoque->quantidade);
         fscanf(fp, "%d", &estoque->codigo);
 
@@ -76,7 +76,7 @@ void insereProduto(struct Produto **estoque, int *tamanho, int *posicao){
     //le e insere um novo produto;
     scanf(" %s", (*estoque)[(*posicao)].produto);
     scanf("%d", &(*estoque)[(*posicao)].quantidade);
-    scanf("%d", &(*estoque)[(*posicao)].preço);
+    scanf("%f", &(*estoque)[(*posicao)].preço);
     (*estoque)[(*posicao)].codigo=posicao;
     
     (*posicao)++;
@@ -85,7 +85,7 @@ void insereProduto(struct Produto **estoque, int *tamanho, int *posicao){
 /// @brief = função que imprime o saldo do caixa
 /// @param n = valor acumulado do caixa
 void consultaCaixa(int n){
-    printf("Saldo: %d\n", n);
+    printf("Saldo: %.2f\n", n);
 
     for(int i = 0; i<50; i++){
         printf("-");
@@ -127,14 +127,14 @@ int main(){
     fp = fopen("estoque.bin", "r");
         if(fp == NULL){
             scanf("%d", &tamanho);
-            scanf("%d", &caixa);
+            scanf("%f", &caixa);
             //aloca o vetor estoque do tamanho necessário
             aloca(&estoque, tamanho);
         }
         
         else{
             fscanf("%d", &tamanho);
-            fscanf("%d", &caixa);
+            fscanf("%f", &caixa);
            
             //aloca o vetor estoque do tamanho necessário
             aloca(&estoque, tamanho);
