@@ -21,6 +21,7 @@ struct Produto{
     char produto[50];
     int preço;
     int quantidade;
+    int codigo;
 };
 
 void leEstoque(FILE *fp, struct Produto *estoque){
@@ -28,6 +29,7 @@ void leEstoque(FILE *fp, struct Produto *estoque){
         fscanf(fp, "%s", estoque->produto);
         fscanf(fp, "%d", &estoque->preço);
         fscanf(fp, "%d", &estoque->quantidade);
+        fscanf(fp, "%d", &estoque->codigo);
 
 }
 
@@ -107,6 +109,7 @@ int main(){
     int tamanho=0;
     int caixa=0;
     FILE *fp;
+    char comando[3];
 
     //precisamos fazer a parte que tenta ler do arquivo ou do terminal. AO final desta parte, teremos
     //tamanho e caixa atualizados. Assim, podemos alocar o espaço para o estoque.
@@ -130,15 +133,37 @@ int main(){
             }
         }
 
+    while(1){
+        scanf(" %s", comando);
 
-    //passa endereço do estoque e o tamanho atual. Passando o tamanho por referência pq sempre vamos
-    //incrementar, ai já fazemos isso na função pra deixar limpo
-    insereProduto(&estoque, &tamanho, &posicao);
+        if(srtcmp(comando, "IP")==0){
+             //passa endereço do estoque e o tamanho atual. Passando o tamanho por referência pq sempre vamos
+            //incrementar, ai já fazemos isso na função pra deixar limpo
+            insereProduto(&estoque, &tamanho, &posicao);
+        }
+        else if(strcmp(comando, "AE")==0){
+            aumentaEstoque(&estoque);
+        }
+        else if(strcmp(comando, "MP")==0){
+            modificaPreco(&estoque);
+        }
+        else if(strcmp(comando, "VE")==0){
+            venda(&estoque);
+        }
+        else if(strcmp(comando, "CE")==0){
+            consultaEstoque(&estoque, posicao);
+        }
 
-    consultaEstoque(&estoque, posicao);
+        else if(strcmp(comando, "CS")==0){
+            consultaCaixa(caixa);
+        }
+        else if(strcmp(comando, "FE")==0){
 
-    consultaCaixa(caixa);
+            //fecha o dia tralalalala
 
+            break;
+        }
+    }
 
     return 0;
 }
