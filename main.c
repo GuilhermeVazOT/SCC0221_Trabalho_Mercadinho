@@ -73,17 +73,24 @@ void insereProduto(struct Produto **estoque, int *tamanho, int *posicao){
     }
     
     //incrementa a posicao final do vetor
-    (*posicao)++;
     //le e insere um novo produto;
     scanf(" %s", (*estoque)[(*posicao)].produto);
     scanf("%d", &(*estoque)[(*posicao)].quantidade);
     scanf("%d", &(*estoque)[(*posicao)].preço);
+    (*estoque)[(*posicao)].codigo=posicao;
+    
+    (*posicao)++;
     
 }
 /// @brief = função que imprime o saldo do caixa
 /// @param n = valor acumulado do caixa
 void consultaCaixa(int n){
     printf("Saldo: %d\n", n);
+
+    for(int i = 0; i<50; i++){
+        printf("-");
+    }
+    printf("\n");
 }
 
 
@@ -93,9 +100,13 @@ void consultaCaixa(int n){
 void consultaEstoque(struct Produto **estoque, int n){
 
     for(int i =0; i<n; i++){
-        printf("%d %s %d\n", i, (*estoque)[i].produto, (*estoque)[i].quantidade);
+        printf("%d %s %d\n", (*estoque)[i].codigo, (*estoque)[i].produto, (*estoque)[i].quantidade);
     }
 
+    for(int i = 0; i<50; i++){
+        printf("-");
+    }
+    printf("\n");
 
 }
 
@@ -148,7 +159,7 @@ int main(){
             modificaPreco(&estoque);
         }
         else if(strcmp(comando, "VE")==0){
-            venda(&estoque);
+            venda(&estoque, &caixa);
         }
         else if(strcmp(comando, "CE")==0){
             consultaEstoque(&estoque, posicao);
