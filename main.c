@@ -15,12 +15,21 @@ void aloca(struct Produto **estoque, int n);
 void insereProduto(struct Produto **estoque, int *tamanho, int *posicao);
 void consultaCaixa(int n);
 void consultaEstoque(struct Produto **estoque, int n);
+void leEstoque(FILE *fp, struct Produto *estoque);
 
 struct Produto{
     char produto[50];
     int preço;
     int quantidade;
 };
+
+void leEstoque(FILE *fp, struct Produto *estoque){
+
+        fscanf(fp, "%s", estoque->produto);
+        fscanf(fp, "%d", &estoque->preço);
+        fscanf(fp, "%d", &estoque->quantidade);
+
+}
 
 /// @brief função que realoca para um espaço de memória maior
 /// @param estoque ponteiro para o vetor que deve ser realocado
@@ -115,9 +124,10 @@ int main(){
            
             //aloca o vetor estoque do tamanho necessário
             aloca(&estoque, tamanho);
-
-            //função que vai percorrer o arquivo lendo os itens e colocando no vetor
-            leEstoque(fp, tamanho);
+            for(int i =0; i<tamanho; i++){
+                //função que vai percorrer o arquivo lendo os itens e colocando no vetor
+                leEstoque(fp, &estoque[i]);
+            }
         }
 
 
