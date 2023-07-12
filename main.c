@@ -20,7 +20,7 @@ typedef struct _Produto{
 void realoca(Produto **estoque, int n);
 void aloca(Produto **estoque, int n);
 void insereProduto(Produto **estoque, int *tamanho, int *posicao);
-void consultaCaixa(int n);
+void consultaCaixa(double n);
 void consultaEstoque(Produto **estoque, int n);
 void leEstoque(FILE *fp, Produto *estoque);
 void modificaPreco(Produto **estoque);
@@ -53,10 +53,10 @@ void fechaEstoque(Produto **estoque, FILE **fp, int posicao){
     
     freopen("estoque.bin", "w", *fp);
     for(int i = 0; i <= posicao; i++){
-        fprintf(fp," %s", (*estoque)[i].produto);
-        fprintf(fp,"%f", (*estoque)[i].preco);
-        fprintf(fp,"%d", (*estoque)[i].quantidade);
-        fprintf(fp,"%i", (*estoque)[i].codigo);
+        fprintf(*fp," %s", (*estoque)[i].produto);
+        fprintf(*fp,"%f", (*estoque)[i].preco);
+        fprintf(*fp,"%d", (*estoque)[i].quantidade);
+        fprintf(*fp,"%i", (*estoque)[i].codigo);
         if(fclose(*fp) != 0){
             perror("Erro no Salvamento.\n");
             return;
@@ -123,7 +123,7 @@ void venda(Produto **estoque, float *caixa){
 void leEstoque(FILE *fp, Produto *estoque){
 
         fscanf(fp, "%s", estoque->produto);
-        fscanf(fp, "%.2f", &estoque->preco);
+        fscanf(fp, "%f", &estoque->preco);
         fscanf(fp, "%d", &estoque->quantidade);
         fscanf(fp, "%d", &estoque->codigo);
 
@@ -180,7 +180,7 @@ void insereProduto(Produto **estoque, int *tamanho, int *posicao){
 }
 /// @brief = função que imprime o saldo do caixa
 /// @param n = valor acumulado do caixa
-void consultaCaixa(int n){
+void consultaCaixa(double n){
     printf("Saldo: %.2f\n", n);
 
     for(int i = 0; i<50; i++){
