@@ -26,7 +26,7 @@ void leEstoque(FILE *fp, Produto *estoque);
 void modificaPreco(Produto **estoque);
 void venda(Produto **estoque, float *caixa);
 void aumentaEstoque(Produto **estoque, int posicao);
-void fechaEstoque(Produto **estoque, FILE *fp, int posicao);
+void fechaEstoque(Produto **estoque, FILE **fp, int posicao);
 
 
 /// @brief função que aumenta a quantidade de um produto registrado no estoque.
@@ -49,15 +49,15 @@ void aumentaEstoque(Produto **estoque, int posicao){
 /// @param estoque ponteiro para o vetor que deve ser salvo.
 /// @param fp ponteiro para o arquivo em disco.
 /// @param posicao inteiro com o id do último produto do estoque.
-void fechaEstoque(Produto **estoque, FILE *fp, int posicao){
+void fechaEstoque(Produto **estoque, FILE **fp, int posicao){
     
-    freopen("estoque.bin", "w", fp);
+    freopen("estoque.bin", "w", *fp);
     for(int i = 0; i <= posicao; i++){
         fprintf(fp," %s", (*estoque)[i].produto);
         fprintf(fp,"%f", (*estoque)[i].preco);
         fprintf(fp,"%d", (*estoque)[i].quantidade);
         fprintf(fp,"%i", (*estoque)[i].codigo);
-        if(fclose(fp) != 0){
+        if(fclose(*fp) != 0){
             perror("Erro no Salvamento.\n");
             return;
         }
@@ -266,7 +266,7 @@ int main(){
         }
         else if(strcmp(comando, "FE")==0){
 
-            fechaEstoque( &estoque, fp, posicao);
+            fechaEstoque( &estoque, &fp, posicao);
 
             break;
         }
