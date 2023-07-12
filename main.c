@@ -25,12 +25,45 @@ void consultaEstoque(Produto **estoque, int n);
 void leEstoque(FILE *fp, Produto *estoque);
 void modificaPreco(Produto **estoque);
 void venda(Produto **estoque, float *caixa);
-void aumentaEstoque(Produto **estoque);
+void aumentaEstoque(Produto **estoque, int posicao);
+void fechaEstoque(Produto **estoque, FILE *fp, int posicao);
 
 
+/// @brief função que aumenta a quantidade de um produto registrado no estoque.
+/// @param estoque ponteiro para o vetor de struct que contém a quantidade do produto a ser incrementada.
+/// @param posicao inteiro com o id do último produto do estoque.
+void aumentaEstoque(Produto **estoque, int posicao){
+    
+    int id, qnt;
 
+    fflush(stdin);
 
+    scanf("%d %d", &id, &qnt);
 
+    if(id > posicao){perror("Produto não consta\n"); return;};
+
+    (*estoque)[id].quantidade += qnt;
+}
+
+/// @brief função que salva o estoque em arquivos.
+/// @param estoque ponteiro para o vetor que deve ser salvo.
+/// @param fp ponteiro para o arquivo em disco.
+/// @param posicao inteiro com o id do último produto do estoque.
+void fechaEstoque(Produto **estoque, FILE *fp, int posicao){
+    
+    freopen("estoque.bin", "w", fp);
+    for(int i = 0; i <= posicao; i++){
+        fprintf(fp," %s", (*estoque)[i].produto);
+        fprintf(fp,"%f", (*estoque)[i].preco);
+        fprintf(fp,"%d", (*estoque)[i].quantidade);
+        fprintf(fp,"%i", (*estoque)[i].codigo);
+        if(fclose(fp) != 0){
+            perror("Erro no Salvamento.\n");
+            return;
+        }
+    }
+
+}
 
 
 /// @brief 
@@ -187,7 +220,7 @@ int main(){
 
     //precisamos fazer a parte que tenta ler do arquivo ou do terminal. AO final desta parte, teremos
     //tamanho e caixa atualizados. Assim, podemos alocar o espaço para o estoque.
-    fp = fopen("estoque.bin", "r");
+    fp = fopen("estoque.bin", "r+");
         if(fp == NULL){
             scanf("%d", &tamanho);
             scanf("%f", &caixa);
@@ -216,7 +249,7 @@ int main(){
             insereProduto(&estoque, &tamanho, &posicao);
         }
         else if(strcmp(comando, "AE")==0){
-            aumentaEstoque(&estoque);
+            aumentaEstoque(&estoque, posicao);
         }
         else if(strcmp(comando, "MP")==0){
             modificaPreco(&estoque);
@@ -233,7 +266,7 @@ int main(){
         }
         else if(strcmp(comando, "FE")==0){
 
-            //fecha o dia tralalalala
+            fechaEstoque( &estoque, fp, posicao);
 
             break;
         }
