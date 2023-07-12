@@ -205,6 +205,7 @@ int main(){
                 //função que vai percorrer o arquivo lendo os itens e colocando no vetor
                 leEstoque(fp, &estoque[i]);
             }
+            posicao=tamanho;
         }
 
     while(1){
